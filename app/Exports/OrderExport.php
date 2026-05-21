@@ -32,7 +32,6 @@ class OrderExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
             'Nomor VA',
             'Qty',
             'Harga',
-            'Subtotal',
             'Platform',
             'Tanggal Dibuat',
         ];
@@ -47,7 +46,6 @@ class OrderExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
             $order->nomor_va,
             $order->qty,
             $order->harga,
-            $order->qty * $order->harga,
             $order->platform,
             $order->created_at->format('Y-m-d H:i:s'),
         ];
