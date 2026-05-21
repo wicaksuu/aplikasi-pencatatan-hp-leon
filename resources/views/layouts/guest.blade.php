@@ -7,20 +7,12 @@
 
         <title>{{ config('app.name', 'Leon') }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <!-- Styles -->
         @livewireStyles
         <style>
-            body {
-                font-family: 'Outfit', sans-serif;
-            }
             .premium-bg {
                 background: linear-gradient(-45deg, #0f172a, #020617, #1e1b4b, #000000);
                 background-size: 400% 400%;

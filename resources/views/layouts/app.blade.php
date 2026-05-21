@@ -7,20 +7,12 @@
 
         <title>{{ config('app.name', 'Leon') }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <!-- Styles -->
         @livewireStyles
         <style>
-            body {
-                font-family: 'Outfit', sans-serif;
-            }
             details > summary {
                 list-style: none;
             }
@@ -151,6 +143,10 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
                             Kelola Platform
                         </a></li>
+                        <li><a href="{{ route('admin.users') }}" class="{{ request()->routeIs('admin.users') ? 'bg-white/10 text-white font-semibold' : 'hover:bg-white/5 hover:text-white' }} rounded-xl mb-2 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                            Kelola Pengguna
+                        </a></li>
                     </ul>
                 </div>
             
@@ -185,6 +181,10 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
                 <span class="text-[10px] font-medium leading-none">Platform</span>
             </a>
+            <a href="{{ route('admin.users') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.users') ? 'text-sky-400 bg-white/5 border-t-2 border-sky-400' : 'text-gray-400 hover:bg-white/5 border-t-2 border-transparent' }} transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                <span class="text-[10px] font-medium leading-none">Pengguna</span>
+            </a>
         </div>
         
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
@@ -197,88 +197,5 @@
         <livewire:admin.archive-selector-modal />
 
         @livewireScripts
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-            document.addEventListener('livewire:initialized', () => {
-                Livewire.on('swal:confirm', (data) => {
-                    let details = data[0];
-                    Swal.fire({
-                        title: details.title,
-                        text: details.text,
-                        icon: details.type,
-                        showCancelButton: true,
-                        confirmButtonText: details.confirmText || 'Ya, Lanjutkan',
-                        cancelButtonText: 'Batal',
-                        confirmButtonColor: '#8b5cf6', // Violet
-                        cancelButtonColor: '#ef4444', // Red
-                        background: 'rgba(15, 23, 42, 0.9)', // Slate-900 / 90%
-                        color: '#f8fafc',
-                        backdrop: 'rgba(0, 0, 0, 0.6)',
-                        customClass: {
-                            popup: 'border border-white/10 backdrop-blur-xl rounded-2xl shadow-2xl',
-                            confirmButton: 'rounded-xl px-6 py-2.5 font-semibold transition-all hover:scale-105',
-                            cancelButton: 'rounded-xl px-6 py-2.5 font-semibold transition-all hover:scale-105',
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            Livewire.dispatch(details.method, { id: details.id });
-                        }
-                    });
-                });
-
-                Livewire.on('swal:prompt', (data) => {
-                    let details = data[0];
-                    Swal.fire({
-                        title: details.title,
-                        text: details.text,
-                        input: 'text',
-                        icon: details.type,
-                        showCancelButton: true,
-                        confirmButtonText: details.confirmText || 'Simpan',
-                        cancelButtonText: 'Batal',
-                        confirmButtonColor: '#8b5cf6',
-                        cancelButtonColor: '#ef4444',
-                        background: 'rgba(15, 23, 42, 0.9)',
-                        color: '#f8fafc',
-                        backdrop: 'rgba(0, 0, 0, 0.6)',
-                        inputValidator: (value) => {
-                            if (!value) {
-                                return "Input tidak boleh kosong!";
-                            }
-                        },
-                        customClass: {
-                            popup: 'border border-white/10 backdrop-blur-xl rounded-2xl shadow-2xl',
-                            confirmButton: 'rounded-xl px-6 py-2.5 font-semibold transition-all hover:scale-105',
-                            cancelButton: 'rounded-xl px-6 py-2.5 font-semibold transition-all hover:scale-105',
-                            input: 'bg-black/20 border border-white/10 rounded-xl text-white focus:ring-2 focus:ring-violet-500 mt-4'
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            Livewire.dispatch(details.method, { value: result.value });
-                        }
-                    });
-                });
-
-                Livewire.on('swal:toast', (data) => {
-                    let details = data[0];
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        background: 'rgba(15, 23, 42, 0.9)',
-                        color: '#f8fafc',
-                        customClass: {
-                            popup: 'border border-white/10 backdrop-blur-xl rounded-xl shadow-lg mt-16 mr-4',
-                        }
-                    });
-                    Toast.fire({
-                        icon: details.type,
-                        title: details.title
-                    });
-                });
-            });
-        </script>
     </body>
 </html>
