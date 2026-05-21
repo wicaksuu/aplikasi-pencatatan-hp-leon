@@ -46,6 +46,7 @@
         <tbody>
             @php $total = 0; @endphp
             @forelse($orders as $index => $order)
+                @php $total += $order->harga; @endphp
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $order->created_at->format('d/m/Y') }}</td>
