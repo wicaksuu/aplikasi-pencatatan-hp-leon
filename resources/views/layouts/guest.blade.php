@@ -5,7 +5,30 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Leon') }}</title>
+        <title>@yield('title', config('app.name', 'Leon'))</title>
+        <meta name="description" content="Leon — Aplikasi pencatatan pesanan handphone terintegrasi dari berbagai marketplace. Kelola penjualan, arsip, dan platform dalam satu dashboard premium.">
+        <meta name="keywords" content="pencatatan hp, manajemen pesanan, marketplace, e-commerce, leon">
+        <meta name="author" content="Leon">
+        <meta name="robots" content="index, follow">
+        <meta name="theme-color" content="#0f172a">
+
+        <!-- Canonical -->
+        <link rel="canonical" href="{{ url()->current() }}">
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:title" content="{{ config('app.name', 'Leon') }}">
+        <meta property="og:description" content="Aplikasi pencatatan pesanan handphone terintegrasi dari berbagai marketplace.">
+        <meta property="og:site_name" content="{{ config('app.name', 'Leon') }}">
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content="{{ config('app.name', 'Leon') }}">
+        <meta name="twitter:description" content="Aplikasi pencatatan pesanan handphone terintegrasi dari berbagai marketplace.">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])

@@ -5,8 +5,9 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-2">
                         <x-application-mark class="block h-9 w-auto" />
+                        <span class="font-bold tracking-tight text-gray-800">Le<span class="text-sky-500 font-light">on</span></span>
                     </a>
                 </div>
 
