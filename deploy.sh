@@ -28,9 +28,6 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-echo "[7/7] Link storage..."
-php artisan storage:link || true
-
 echo "========================================"
 echo "Deploy selesai!"
 echo "========================================"

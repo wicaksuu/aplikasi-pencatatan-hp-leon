@@ -2,16 +2,18 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Archive;
+use App\Models\Order;
+use App\Models\Platform;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Order;
-use App\Models\Archive;
 
 class OrderDashboard extends Component
 {
     use WithPagination;
 
     public $dateStart = null;
+
     public $dateEnd = null;
 
     public function render()
@@ -112,7 +114,7 @@ class OrderDashboard extends Component
             ->orderByDesc('total_orders')
             ->get();
 
-        $platformColors = \App\Models\Platform::pluck('color', 'name')->toArray();
+        $platformColors = Platform::pluck('color', 'name')->toArray();
 
         return view('livewire.admin.order-dashboard', [
             'totalRevenue' => $totalRevenue,

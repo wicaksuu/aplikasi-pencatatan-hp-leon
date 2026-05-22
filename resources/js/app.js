@@ -89,3 +89,17 @@ document.addEventListener('livewire:initialized', () => {
         });
     });
 });
+
+// Pendaftaran Service Worker untuk Progressive Web App (PWA)
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+                console.log('Service Worker Leon berhasil terdaftar dengan scope:', registration.scope);
+            })
+            .catch((error) => {
+                console.warn('Pendaftaran Service Worker gagal:', error);
+            });
+    });
+}
+

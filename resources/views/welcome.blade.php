@@ -1,7 +1,7 @@
 <x-guest-layout>
     <!-- Hero Section -->
-    <div class="min-h-screen flex items-center justify-center relative z-10 pt-20 pb-8 lg:pt-16 lg:pb-12">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-12 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-16 h-full">
+    <div class="min-h-screen flex items-center justify-center relative z-10 pt-0 lg:pt-16 pb-8 lg:pb-12 w-full">
+        <div class="container mx-auto px-0 lg:px-12 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-16 h-full w-full">
 
             <!-- Left Side Text (Hidden on Mobile) -->
             <div class="hidden lg:flex flex-col text-left max-w-2xl lg:w-1/2">

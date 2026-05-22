@@ -2,26 +2,37 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Order;
+use App\Models\Platform;
 use App\Models\Setting;
+use Livewire\Component;
 
 class PublicOrderForm extends Component
 {
     public $nama_barang;
+
     public $no_order;
+
     public $nomor_va;
+
     public $qty = 1;
+
     public $harga;
+
     public $platform = '';
 
     public $platforms = [];
+
+    public $platformsData = [];
+
     public $inputEnabled = true;
+
     public $suggestions = [];
 
     public function mount()
     {
-        $this->platforms = \App\Models\Platform::pluck('name')->toArray();
+        $this->platforms = Platform::pluck('name')->toArray();
+        $this->platformsData = Platform::all()->toArray();
         $this->inputEnabled = (bool) Setting::get('order_input_enabled', true);
     }
 
@@ -33,7 +44,7 @@ class PublicOrderForm extends Component
             'nomor_va' => 'nullable|string|max:255',
             'qty' => 'required|integer|min:1',
             'harga' => 'required|numeric|min:0',
-            'platform' => 'required|string|in:' . implode(',', $this->platforms),
+            'platform' => 'required|string|in:'.implode(',', $this->platforms),
         ];
     }
 
@@ -61,7 +72,7 @@ class PublicOrderForm extends Component
     public function searchBarang()
     {
         if (strlen($this->nama_barang) >= 2) {
-            $this->suggestions = Order::where('nama_barang', 'like', '%' . $this->nama_barang . '%')
+            $this->suggestions = Order::where('nama_barang', 'like', '%'.$this->nama_barang.'%')
                 ->select('nama_barang')
                 ->distinct()
                 ->orderBy('nama_barang')
@@ -81,11 +92,12 @@ class PublicOrderForm extends Component
 
     public function submit()
     {
-        if (!$this->inputEnabled) {
+        if (! $this->inputEnabled) {
             $this->dispatch('swal:toast', [
                 'type' => 'error',
-                'title' => 'Fitur input pesanan sedang dinonaktifkan.'
+                'title' => 'Fitur input pesanan sedang dinonaktifkan.',
             ]);
+
             return;
         }
 
@@ -100,9 +112,11 @@ class PublicOrderForm extends Component
             'platform' => $this->platform,
         ]);
 
+        session()->flash('message', 'Data pesanan berhasil disimpan');
+
         $this->dispatch('swal:toast', [
             'type' => 'success',
-            'title' => 'Data pesanan berhasil disimpan.'
+            'title' => 'Data pesanan berhasil disimpan.',
         ]);
 
         $this->reset(['nama_barang', 'no_order', 'nomor_va', 'qty', 'harga', 'platform']);

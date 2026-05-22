@@ -2,14 +2,13 @@
 
 namespace App\Exports;
 
-use App\Models\Order;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class OrderExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
+class OrderExport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping
 {
     protected Collection $orders;
 

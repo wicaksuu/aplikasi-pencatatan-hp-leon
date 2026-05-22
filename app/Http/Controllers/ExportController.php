@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Order;
 use App\Exports\OrderExport;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Order;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ExportController extends Controller
 {
@@ -35,9 +35,9 @@ class ExportController extends Controller
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('nama_barang', 'like', '%' . $search . '%')
-                  ->orWhere('no_order', 'like', '%' . $search . '%')
-                  ->orWhere('nomor_va', 'like', '%' . $search . '%');
+                $q->where('nama_barang', 'like', '%'.$search.'%')
+                    ->orWhere('no_order', 'like', '%'.$search.'%')
+                    ->orWhere('nomor_va', 'like', '%'.$search.'%');
             });
         }
 
@@ -47,7 +47,7 @@ class ExportController extends Controller
     public function excel(Request $request)
     {
         $orders = $this->buildOrderQuery($request);
-        $fileName = 'orders_' . date('YmdHis') . '.xlsx';
+        $fileName = 'orders_'.date('YmdHis').'.xlsx';
 
         return Excel::download(new OrderExport($orders), $fileName);
     }
@@ -55,10 +55,10 @@ class ExportController extends Controller
     public function pdf(Request $request)
     {
         $orders = $this->buildOrderQuery($request);
-        $fileName = 'orders_' . date('YmdHis') . '.pdf';
+        $fileName = 'orders_'.date('YmdHis').'.pdf';
 
         $pdf = Pdf::loadView('pdf.orders', compact('orders'))
-                  ->setPaper('a4', 'landscape');
+            ->setPaper('a4', 'landscape');
 
         return $pdf->stream($fileName);
     }

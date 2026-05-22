@@ -2,31 +2,38 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Order;
+use App\Models\Platform;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\On;
-use App\Models\Order;
 
 class OrderList extends Component
 {
     use WithPagination;
 
     public $search = '';
+
     public $dateStart = null;
+
     public $dateEnd = null;
+
     public $platformFilter = '';
 
     public $selectedRows = [];
+
     public $selectAll = false;
 
     public $showExportModal = false;
+
     public $exportType = 'excel';
+
     public $exportPreviewLimit = 25;
 
     public function updatedSelectAll($value)
     {
         if ($value) {
-            $this->selectedRows = $this->ordersQuery->pluck('id')->map(fn($id) => (string) $id)->toArray();
+            $this->selectedRows = $this->ordersQuery->pluck('id')->map(fn ($id) => (string) $id)->toArray();
         } else {
             $this->selectedRows = [];
         }
@@ -54,15 +61,16 @@ class OrderList extends Component
         }
 
         if ($this->search) {
-            $query->where(function($q) {
-                $q->where('nama_barang', 'like', '%' . $this->search . '%')
-                  ->orWhere('no_order', 'like', '%' . $this->search . '%')
-                  ->orWhere('nomor_va', 'like', '%' . $this->search . '%');
+            $query->where(function ($q) {
+                $q->where('nama_barang', 'like', '%'.$this->search.'%')
+                    ->orWhere('no_order', 'like', '%'.$this->search.'%')
+                    ->orWhere('nomor_va', 'like', '%'.$this->search.'%');
             });
         }
 
         return $query->latest();
     }
+
     public function deleteOrder($id)
     {
         $this->dispatch('swal:confirm', [
@@ -71,7 +79,7 @@ class OrderList extends Component
             'text' => 'Pesanan ini akan dihapus (masuk keranjang sampah).',
             'confirmText' => 'Ya, Hapus',
             'method' => 'performDeleteOrder',
-            'id' => $id
+            'id' => $id,
         ]);
     }
 
@@ -82,7 +90,7 @@ class OrderList extends Component
             Order::find($id)?->delete();
             $this->dispatch('swal:toast', [
                 'type' => 'success',
-                'title' => 'Pesanan berhasil dihapus.'
+                'title' => 'Pesanan berhasil dihapus.',
             ]);
         }
     }
@@ -92,11 +100,11 @@ class OrderList extends Component
         if (count($this->selectedRows) > 0) {
             $this->dispatch('swal:confirm', [
                 'type' => 'warning',
-                'title' => 'Hapus ' . count($this->selectedRows) . ' Data?',
+                'title' => 'Hapus '.count($this->selectedRows).' Data?',
                 'text' => 'Pesanan yang dipilih akan dihapus.',
                 'confirmText' => 'Ya, Hapus',
                 'method' => 'performDeleteSelected',
-                'id' => null
+                'id' => null,
             ]);
         }
     }
@@ -110,7 +118,7 @@ class OrderList extends Component
         $this->selectAll = false;
         $this->dispatch('swal:toast', [
             'type' => 'success',
-            'title' => $count . ' pesanan berhasil dihapus.'
+            'title' => $count.' pesanan berhasil dihapus.',
         ]);
     }
 
@@ -126,7 +134,7 @@ class OrderList extends Component
         if (count($this->selectedRows) > 0) {
             $this->dispatch('openArchiveModal', [
                 'orders' => $this->selectedRows,
-                'source' => 'order-list'
+                'source' => 'order-list',
             ]);
         }
     }
@@ -164,14 +172,14 @@ class OrderList extends Component
     public function render()
     {
         $query = $this->ordersQuery;
-        
+
         // Menghitung statistik berdasarkan filter saat ini
         $totalRevenue = (clone $query)->sum('harga');
         $totalOrders = (clone $query)->count();
         $totalItems = (clone $query)->sum('qty');
 
-        $platformColors = \App\Models\Platform::pluck('color', 'name')->toArray();
-        $platforms = \App\Models\Platform::orderBy('name')->pluck('name');
+        $platformColors = Platform::pluck('color', 'name')->toArray();
+        $platforms = Platform::orderBy('name')->pluck('name');
 
         return view('livewire.admin.order-list', [
             'orders' => $query->paginate(10),

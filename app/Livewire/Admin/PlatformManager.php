@@ -2,17 +2,21 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
-use Livewire\Attributes\On;
 use App\Models\Platform;
 use App\Models\Setting;
+use Livewire\Attributes\On;
+use Livewire\Component;
 
 class PlatformManager extends Component
 {
     public $platforms;
+
     public $name = '';
+
     public $color = '#38bdf8'; // Default sky-400
+
     public $editingId = null;
+
     public $inputEnabled = true;
 
     public function mount()
@@ -28,19 +32,19 @@ class PlatformManager extends Component
 
     public function toggleInput()
     {
-        $this->inputEnabled = !$this->inputEnabled;
+        $this->inputEnabled = ! $this->inputEnabled;
         Setting::set('order_input_enabled', $this->inputEnabled);
 
         $this->dispatch('swal:toast', [
             'type' => 'success',
-            'title' => $this->inputEnabled ? 'Fitur input pesanan diaktifkan.' : 'Fitur input pesanan dinonaktifkan.'
+            'title' => $this->inputEnabled ? 'Fitur input pesanan diaktifkan.' : 'Fitur input pesanan dinonaktifkan.',
         ]);
     }
 
     public function save()
     {
         $this->validate([
-            'name' => 'required|string|max:255|unique:platforms,name,' . $this->editingId,
+            'name' => 'required|string|max:255|unique:platforms,name,'.$this->editingId,
             'color' => 'required|string|max:20',
         ]);
 
@@ -87,7 +91,7 @@ class PlatformManager extends Component
             'text' => 'Data platform ini akan dihapus secara permanen.',
             'confirmText' => 'Ya, Hapus',
             'method' => 'performDeletePlatform',
-            'id' => $id
+            'id' => $id,
         ]);
     }
 
@@ -104,7 +108,7 @@ class PlatformManager extends Component
     public function render()
     {
         return view('livewire.admin.platform-manager', [
-            'platforms' => Platform::latest()->get()
+            'platforms' => Platform::latest()->get(),
         ])->layout('layouts.app');
     }
 }

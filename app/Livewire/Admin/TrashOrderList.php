@@ -2,27 +2,32 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Order;
+use App\Models\Platform;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\On;
-use App\Models\Order;
 
 class TrashOrderList extends Component
 {
     use WithPagination;
 
     public $search = '';
+
     public $dateStart = null;
+
     public $dateEnd = null;
+
     public $platformFilter = '';
 
     public $selectedRows = [];
+
     public $selectAll = false;
 
     public function updatedSelectAll($value)
     {
         if ($value) {
-            $this->selectedRows = $this->ordersQuery->pluck('id')->map(fn($id) => (string) $id)->toArray();
+            $this->selectedRows = $this->ordersQuery->pluck('id')->map(fn ($id) => (string) $id)->toArray();
         } else {
             $this->selectedRows = [];
         }
@@ -57,10 +62,10 @@ class TrashOrderList extends Component
         }
 
         if ($this->search) {
-            $query->where(function($q) {
-                $q->where('nama_barang', 'like', '%' . $this->search . '%')
-                  ->orWhere('no_order', 'like', '%' . $this->search . '%')
-                  ->orWhere('nomor_va', 'like', '%' . $this->search . '%');
+            $query->where(function ($q) {
+                $q->where('nama_barang', 'like', '%'.$this->search.'%')
+                    ->orWhere('no_order', 'like', '%'.$this->search.'%')
+                    ->orWhere('nomor_va', 'like', '%'.$this->search.'%');
             });
         }
 
@@ -72,7 +77,7 @@ class TrashOrderList extends Component
         Order::onlyTrashed()->find($id)?->restore();
         $this->dispatch('swal:toast', [
             'type' => 'success',
-            'title' => 'Pesanan berhasil dipulihkan.'
+            'title' => 'Pesanan berhasil dipulihkan.',
         ]);
     }
 
@@ -84,7 +89,7 @@ class TrashOrderList extends Component
             'text' => 'Pesanan ini akan dihapus permanen dan tidak dapat dipulihkan.',
             'confirmText' => 'Ya, Hapus Permanen',
             'method' => 'performForceDeleteOrder',
-            'id' => $id
+            'id' => $id,
         ]);
     }
 
@@ -95,7 +100,7 @@ class TrashOrderList extends Component
             Order::onlyTrashed()->find($id)?->forceDelete();
             $this->dispatch('swal:toast', [
                 'type' => 'success',
-                'title' => 'Pesanan berhasil dihapus permanen.'
+                'title' => 'Pesanan berhasil dihapus permanen.',
             ]);
         }
     }
@@ -109,7 +114,7 @@ class TrashOrderList extends Component
             $this->selectAll = false;
             $this->dispatch('swal:toast', [
                 'type' => 'success',
-                'title' => $count . ' pesanan berhasil dipulihkan.'
+                'title' => $count.' pesanan berhasil dipulihkan.',
             ]);
         }
     }
@@ -119,11 +124,11 @@ class TrashOrderList extends Component
         if (count($this->selectedRows) > 0) {
             $this->dispatch('swal:confirm', [
                 'type' => 'warning',
-                'title' => 'Hapus Permanen ' . count($this->selectedRows) . ' Data?',
+                'title' => 'Hapus Permanen '.count($this->selectedRows).' Data?',
                 'text' => 'Pesanan yang dipilih akan dihapus secara permanen.',
                 'confirmText' => 'Ya, Hapus Permanen',
                 'method' => 'performForceDeleteSelected',
-                'id' => null
+                'id' => null,
             ]);
         }
     }
@@ -133,7 +138,7 @@ class TrashOrderList extends Component
         if (count($this->selectedRows) > 0) {
             $this->dispatch('openArchiveModal', [
                 'orders' => $this->selectedRows,
-                'source' => 'trash-order-list'
+                'source' => 'trash-order-list',
             ]);
         }
     }
@@ -147,19 +152,19 @@ class TrashOrderList extends Component
         $this->selectAll = false;
         $this->dispatch('swal:toast', [
             'type' => 'success',
-            'title' => $count . ' pesanan berhasil dihapus permanen.'
+            'title' => $count.' pesanan berhasil dihapus permanen.',
         ]);
     }
 
     public function render()
     {
         $query = $this->ordersQuery;
-        
+
         $totalItems = (clone $query)->sum('qty');
         $totalOrders = (clone $query)->count();
 
-        $platformColors = \App\Models\Platform::pluck('color', 'name')->toArray();
-        $platforms = \App\Models\Platform::orderBy('name')->pluck('name');
+        $platformColors = Platform::pluck('color', 'name')->toArray();
+        $platforms = Platform::orderBy('name')->pluck('name');
 
         return view('livewire.admin.trash-order-list', [
             'orders' => $query->paginate(10),

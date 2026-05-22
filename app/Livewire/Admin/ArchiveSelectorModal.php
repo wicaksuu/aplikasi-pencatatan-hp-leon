@@ -2,16 +2,19 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
-use Livewire\Attributes\On;
 use App\Models\Archive;
 use App\Models\Order;
+use Livewire\Attributes\On;
+use Livewire\Component;
 
 class ArchiveSelectorModal extends Component
 {
     public $isOpen = false;
+
     public $searchArchive = '';
+
     public $selectedOrderIds = [];
+
     public $sourceComponent = '';
 
     #[On('openArchiveModal')]
@@ -37,37 +40,43 @@ class ArchiveSelectorModal extends Component
             return Archive::latest()->take(10)->get();
         }
 
-        return Archive::where('name', 'like', '%' . $this->searchArchive . '%')
-                      ->latest()
-                      ->get();
+        return Archive::where('name', 'like', '%'.$this->searchArchive.'%')
+            ->latest()
+            ->get();
     }
 
     public function moveToArchive($archiveId)
     {
-        if (empty($this->selectedOrderIds)) return;
+        if (empty($this->selectedOrderIds)) {
+            return;
+        }
 
         if ($this->sourceComponent === 'trash-order-list') {
             Order::onlyTrashed()->whereIn('id', $this->selectedOrderIds)->restore();
         }
-        
+
         Order::whereIn('id', $this->selectedOrderIds)->update(['archive_id' => $archiveId]);
 
         $archive = Archive::find($archiveId);
 
         $this->dispatch('swal:toast', [
             'type' => 'success',
-            'title' => count($this->selectedOrderIds) . ' pesanan dipindahkan ke Arsip "' . $archive->name . '".'
+            'title' => count($this->selectedOrderIds).' pesanan dipindahkan ke Arsip "'.$archive->name.'".',
         ]);
 
         $this->dispatch('refreshOrders');
-        
+
         $this->closeModal();
     }
 
     public function createNewArchive()
     {
-        if (empty($this->searchArchive)) return;
-        if (empty($this->selectedOrderIds)) return;
+        if (empty($this->searchArchive)) {
+            return;
+        }
+        if (empty($this->selectedOrderIds)) {
+            return;
+        }
 
         $archive = Archive::create(['name' => $this->searchArchive]);
 
@@ -79,11 +88,11 @@ class ArchiveSelectorModal extends Component
 
         $this->dispatch('swal:toast', [
             'type' => 'success',
-            'title' => count($this->selectedOrderIds) . ' pesanan dipindahkan ke Arsip Baru "' . $archive->name . '".'
+            'title' => count($this->selectedOrderIds).' pesanan dipindahkan ke Arsip Baru "'.$archive->name.'".',
         ]);
 
         $this->dispatch('refreshOrders');
-        
+
         $this->closeModal();
     }
 

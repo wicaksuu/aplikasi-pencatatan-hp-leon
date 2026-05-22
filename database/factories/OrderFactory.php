@@ -25,13 +25,13 @@ class OrderFactory extends Factory
         }
 
         $items = ['iPhone 15 Pro Max', 'iPhone 14', 'Samsung S24 Ultra', 'MacBook Air M2', 'iPad Pro M4', 'AirPods Pro 2', 'Samsung Galaxy Z Fold 5', 'Xiaomi 14 Ultra'];
-        
+
         // Tanggal acak dalam 6 bulan terakhir
         $date = fake()->dateTimeBetween('-6 months', 'now');
 
         return [
             'nama_barang' => fake()->randomElement($items),
-            'no_order' => 'ORD-' . strtoupper(fake()->bothify('??####??')),
+            'no_order' => 'ORD-'.strtoupper(fake()->bothify('??####??')),
             'nomor_va' => fake()->boolean(70) ? fake()->numerify('880############') : null,
             'qty' => fake()->numberBetween(1, 5),
             'harga' => fake()->randomElement([15000000, 12000000, 20000000, 18500000, 3000000, 25000000, 16000000]),

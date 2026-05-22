@@ -49,6 +49,7 @@ class PlatformManagerTest extends TestCase
         Livewire::actingAs($user)
             ->test(PlatformManager::class)
             ->call('delete', $platform->id)
+            ->call('performDeletePlatform', $platform->id)
             ->assertHasNoErrors();
 
         $this->assertDatabaseMissing('platforms', ['id' => $platform->id]);

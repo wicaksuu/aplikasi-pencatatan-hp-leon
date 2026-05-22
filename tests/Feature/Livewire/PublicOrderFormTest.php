@@ -4,7 +4,6 @@ namespace Tests\Feature\Livewire;
 
 use App\Livewire\PublicOrderForm;
 use App\Models\Platform;
-use App\Models\Order;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;

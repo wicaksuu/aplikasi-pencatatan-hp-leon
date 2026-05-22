@@ -2,32 +2,40 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\Archive;
 use App\Models\Order;
+use App\Models\Platform;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class ArchiveDetail extends Component
 {
     use WithPagination;
 
     public $archiveId;
+
     public $search = '';
+
     public $dateStart;
+
     public $dateEnd;
+
     public $platformFilter = '';
 
     public $selectedRows = [];
+
     public $selectAll = false;
 
     public $showExportModal = false;
+
     public $exportType = 'excel';
+
     public $exportPreviewLimit = 25;
 
     public function updatedSelectAll($value)
     {
         if ($value) {
-            $this->selectedRows = Order::where('archive_id', $this->archiveId)->pluck('id')->map(fn($id) => (string) $id)->toArray();
+            $this->selectedRows = Order::where('archive_id', $this->archiveId)->pluck('id')->map(fn ($id) => (string) $id)->toArray();
         } else {
             $this->selectedRows = [];
         }
@@ -73,10 +81,10 @@ class ArchiveDetail extends Component
         }
 
         if ($this->search) {
-            $query->where(function($q) {
-                $q->where('nama_barang', 'like', '%' . $this->search . '%')
-                  ->orWhere('no_order', 'like', '%' . $this->search . '%')
-                  ->orWhere('nomor_va', 'like', '%' . $this->search . '%');
+            $query->where(function ($q) {
+                $q->where('nama_barang', 'like', '%'.$this->search.'%')
+                    ->orWhere('no_order', 'like', '%'.$this->search.'%')
+                    ->orWhere('nomor_va', 'like', '%'.$this->search.'%');
             });
         }
 
@@ -84,8 +92,8 @@ class ArchiveDetail extends Component
         $totalItems = (clone $query)->sum('qty');
         $totalOrders = (clone $query)->count();
         $totalRevenue = (clone $query)->sum('harga');
-        $platformColors = \App\Models\Platform::pluck('color', 'name')->toArray();
-        $platforms = \App\Models\Platform::orderBy('name')->pluck('name');
+        $platformColors = Platform::pluck('color', 'name')->toArray();
+        $platforms = Platform::orderBy('name')->pluck('name');
 
         return view('livewire.admin.archive-detail', [
             'orders' => $orders,
@@ -93,7 +101,7 @@ class ArchiveDetail extends Component
             'totalOrders' => $totalOrders,
             'totalRevenue' => $totalRevenue,
             'platformColors' => $platformColors,
-            'platforms' => $platforms
+            'platforms' => $platforms,
         ])->layout('layouts.app');
     }
 
@@ -114,10 +122,10 @@ class ArchiveDetail extends Component
         }
 
         if ($this->search) {
-            $query->where(function($q) {
-                $q->where('nama_barang', 'like', '%' . $this->search . '%')
-                  ->orWhere('no_order', 'like', '%' . $this->search . '%')
-                  ->orWhere('nomor_va', 'like', '%' . $this->search . '%');
+            $query->where(function ($q) {
+                $q->where('nama_barang', 'like', '%'.$this->search.'%')
+                    ->orWhere('no_order', 'like', '%'.$this->search.'%')
+                    ->orWhere('nomor_va', 'like', '%'.$this->search.'%');
             });
         }
 
@@ -159,7 +167,7 @@ class ArchiveDetail extends Component
         if (count($this->selectedRows) > 0) {
             $this->dispatch('openArchiveModal', [
                 'orders' => $this->selectedRows,
-                'source' => 'archive-detail'
+                'source' => 'archive-detail',
             ]);
         }
     }
@@ -173,7 +181,7 @@ class ArchiveDetail extends Component
             $this->selectAll = false;
             $this->dispatch('swal:toast', [
                 'type' => 'success',
-                'title' => $count . ' pesanan dikeluarkan dari arsip.'
+                'title' => $count.' pesanan dikeluarkan dari arsip.',
             ]);
         }
     }
@@ -183,10 +191,10 @@ class ArchiveDetail extends Component
         if (count($this->selectedRows) > 0) {
             $this->dispatch('swal:confirm', [
                 'type' => 'warning',
-                'title' => 'Hapus ' . count($this->selectedRows) . ' Data?',
+                'title' => 'Hapus '.count($this->selectedRows).' Data?',
                 'text' => 'Pesanan yang dipilih akan dihapus (masuk keranjang sampah).',
                 'confirmText' => 'Ya, Hapus',
-                'method' => 'performDeleteSelected'
+                'method' => 'performDeleteSelected',
             ]);
         }
     }
@@ -200,7 +208,7 @@ class ArchiveDetail extends Component
         $this->selectAll = false;
         $this->dispatch('swal:toast', [
             'type' => 'success',
-            'title' => $count . ' pesanan berhasil dihapus.'
+            'title' => $count.' pesanan berhasil dihapus.',
         ]);
     }
 }

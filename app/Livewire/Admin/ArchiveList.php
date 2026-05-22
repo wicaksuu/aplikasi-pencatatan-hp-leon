@@ -2,23 +2,29 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\Attributes\On;
 use App\Models\Archive;
 use App\Models\Order;
+use App\Models\Platform;
+use Livewire\Attributes\On;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class ArchiveList extends Component
 {
     use WithPagination;
 
     public $search = '';
+
     public $showCreateModal = false;
+
     public $newArchiveName = '';
 
     public $showExportModal = false;
+
     public $exportType = 'excel';
+
     public $exportArchiveId = null;
+
     public $exportPreviewLimit = 25;
 
     public function openExportModal($type, $archiveId)
@@ -67,17 +73,17 @@ class ArchiveList extends Component
     public function createArchive()
     {
         $this->validate([
-            'newArchiveName' => 'required|string|max:255|unique:archives,name'
+            'newArchiveName' => 'required|string|max:255|unique:archives,name',
         ], [
             'newArchiveName.required' => 'Nama arsip wajib diisi.',
-            'newArchiveName.unique' => 'Nama arsip sudah ada.'
+            'newArchiveName.unique' => 'Nama arsip sudah ada.',
         ]);
 
         Archive::create(['name' => $this->newArchiveName]);
 
         $this->dispatch('swal:toast', [
             'type' => 'success',
-            'title' => 'Arsip baru berhasil dibuat.'
+            'title' => 'Arsip baru berhasil dibuat.',
         ]);
 
         $this->closeCreateModal();
@@ -91,7 +97,7 @@ class ArchiveList extends Component
             'text' => 'Arsip ini akan dipindahkan ke keranjang sampah.',
             'confirmText' => 'Ya, Buang',
             'method' => 'performDeleteArchive',
-            'id' => $id
+            'id' => $id,
         ]);
     }
 
@@ -102,7 +108,7 @@ class ArchiveList extends Component
             Archive::find($id)?->delete();
             $this->dispatch('swal:toast', [
                 'type' => 'success',
-                'title' => 'Arsip berhasil dibuang ke sampah.'
+                'title' => 'Arsip berhasil dibuang ke sampah.',
             ]);
         }
     }
@@ -110,18 +116,18 @@ class ArchiveList extends Component
     public function render()
     {
         $query = Archive::withCount('orders')
-                        ->withSum('orders', 'harga')
-                        ->withSum('orders', 'qty');
+            ->withSum('orders', 'harga')
+            ->withSum('orders', 'qty');
 
         if ($this->search) {
-            $query->where('name', 'like', '%' . $this->search . '%');
+            $query->where('name', 'like', '%'.$this->search.'%');
         }
 
-        $platformColors = \App\Models\Platform::pluck('color', 'name')->toArray();
+        $platformColors = Platform::pluck('color', 'name')->toArray();
 
         return view('livewire.admin.archive-list', [
             'archives' => $query->latest()->paginate(10),
-            'platformColors' => $platformColors
+            'platformColors' => $platformColors,
         ])->layout('layouts.app');
     }
 }

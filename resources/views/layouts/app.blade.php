@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="dark">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>@yield('title', config('app.name', 'Leon'))</title>
@@ -11,6 +11,14 @@
         <meta name="author" content="Leon">
         <meta name="robots" content="index, follow">
         <meta name="theme-color" content="#0f172a">
+
+        <!-- PWA Support -->
+        <link rel="manifest" href="/manifest.json">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="Leon">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
         <!-- Canonical -->
         <link rel="canonical" href="{{ url()->current() }}">
@@ -218,6 +226,13 @@
 
         <!-- Archive Selector Modal -->
         <livewire:admin.archive-selector-modal />
+
+        <!-- Mencegah Prompt Instalasi PWA Bawaan Browser Muncul di Halaman Admin Ter-Auth -->
+        <script>
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+            });
+        </script>
 
         @livewireScripts
     </body>

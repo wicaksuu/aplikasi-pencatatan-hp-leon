@@ -2,32 +2,38 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\User;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\On;
-use App\Models\User;
 
 class UserManager extends Component
 {
     use WithPagination;
 
     public $name = '';
+
     public $username = '';
+
     public $email = '';
+
     public $password = '';
+
     public $password_confirmation = '';
 
     public $showModal = false;
+
     public $editingId = null;
+
     public $search = '';
 
     protected function rules()
     {
         return [
             'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . $this->editingId,
-            'email' => 'required|email|max:255|unique:users,email,' . $this->editingId,
-            'password' => ($this->editingId ? 'nullable' : 'required') . '|min:8',
+            'username' => 'required|string|max:255|unique:users,username,'.$this->editingId,
+            'email' => 'required|email|max:255|unique:users,email,'.$this->editingId,
+            'password' => ($this->editingId ? 'nullable' : 'required').'|min:8',
             'password_confirmation' => $this->password ? 'required|same:password' : 'nullable',
         ];
     }
@@ -43,6 +49,7 @@ class UserManager extends Component
         $user = User::find($id);
         if (! $user) {
             $this->dispatch('swal:toast', ['type' => 'error', 'title' => 'Pengguna tidak ditemukan.']);
+
             return;
         }
 
@@ -92,11 +99,13 @@ class UserManager extends Component
         $user = User::find($id);
         if (! $user) {
             $this->dispatch('swal:toast', ['type' => 'error', 'title' => 'Pengguna tidak ditemukan.']);
+
             return;
         }
 
         if ($user->id === auth()->id()) {
             $this->dispatch('swal:toast', ['type' => 'error', 'title' => 'Tidak dapat menghapus akun sendiri.']);
+
             return;
         }
 
@@ -106,7 +115,7 @@ class UserManager extends Component
             'text' => "Pengguna {$user->name} akan dihapus secara permanen.",
             'confirmText' => 'Ya, Hapus',
             'method' => 'performDeleteUser',
-            'id' => $id
+            'id' => $id,
         ]);
     }
 
@@ -118,6 +127,7 @@ class UserManager extends Component
             if ($user) {
                 if ($user->id === auth()->id()) {
                     $this->dispatch('swal:toast', ['type' => 'error', 'title' => 'Tidak dapat menghapus akun sendiri.']);
+
                     return;
                 }
                 $user->delete();
@@ -145,7 +155,7 @@ class UserManager extends Component
             ->paginate(10);
 
         return view('livewire.admin.user-manager', [
-            'users' => $users
+            'users' => $users,
         ])->layout('layouts.app');
     }
 }

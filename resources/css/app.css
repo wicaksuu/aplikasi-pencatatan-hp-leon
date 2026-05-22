@@ -5,3 +5,48 @@
 [x-cloak] {
     display: none;
 }
+
+/* Optimasi Perilaku Aplikasi HP (App-Like Feel) */
+html, body {
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+/* Menonaktifkan pemilihan teks yang tidak sengaja pada elemen interaktif */
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Tinggi viewport dinamis agar pas sempurna dengan address bar mobile */
+.h-dynamic-screen {
+    height: 100vh;
+    height: 100dvh;
+}
+
+.min-h-dynamic-screen {
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+/* Transisi mikro-animasi premium */
+.btn-premium {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-premium:active {
+    transform: scale(0.96);
+}
+
+/* Mengatasi safe area padding untuk iPhone dengan notch / Home Indicator */
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+}
+

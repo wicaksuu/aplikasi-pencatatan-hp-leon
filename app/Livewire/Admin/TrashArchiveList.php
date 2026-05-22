@@ -2,10 +2,10 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Archive;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\On;
-use App\Models\Archive;
 
 class TrashArchiveList extends Component
 {
@@ -18,7 +18,7 @@ class TrashArchiveList extends Component
         Archive::onlyTrashed()->find($id)?->restore();
         $this->dispatch('swal:toast', [
             'type' => 'success',
-            'title' => 'Arsip berhasil dipulihkan.'
+            'title' => 'Arsip berhasil dipulihkan.',
         ]);
     }
 
@@ -30,7 +30,7 @@ class TrashArchiveList extends Component
             'text' => 'Arsip ini dan seluruh isinya akan dihancurkan permanen.',
             'confirmText' => 'Ya, Hancurkan',
             'method' => 'performForceDeleteArchive',
-            'id' => $id
+            'id' => $id,
         ]);
     }
 
@@ -42,10 +42,10 @@ class TrashArchiveList extends Component
             if ($archive) {
                 $archive->orders()->withTrashed()->forceDelete();
                 $archive->forceDelete();
-                
+
                 $this->dispatch('swal:toast', [
                     'type' => 'success',
-                    'title' => 'Arsip dan seluruh isinya berhasil dihancurkan.'
+                    'title' => 'Arsip dan seluruh isinya berhasil dihancurkan.',
                 ]);
             }
         }
@@ -56,11 +56,11 @@ class TrashArchiveList extends Component
         $query = Archive::onlyTrashed()->withCount('orders');
 
         if ($this->search) {
-            $query->where('name', 'like', '%' . $this->search . '%');
+            $query->where('name', 'like', '%'.$this->search.'%');
         }
 
         return view('livewire.admin.trash-archive-list', [
-            'archives' => $query->latest()->paginate(10)
+            'archives' => $query->latest()->paginate(10),
         ])->layout('layouts.app');
     }
 }
